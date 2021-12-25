@@ -8,35 +8,28 @@ public class Main {
     static Node prevNode = null;
     static Node headNode = null;
 
-    static void toSkewed(Node root, int order) {
+    static void toSkewed(Node root) {
 
         if (root == null) {
             return;
         }
+        toSkewed(root.left);
+		Node rightNode = root.right;
+		Node leftNode = root.left;
 
-        if (order > 0) {
-            toSkewed(root.right, order);
-        } else {
-            toSkewed(root.left, order);
-        }
-        Node rightNode = root.right;
-        Node leftNode = root.left;
+		if (headNode == null) {
+			headNode = root;
+			root.left = null;
+			prevNode = root;
+		} else {
+			prevNode.right = root;
+			root.left = null;
+			prevNode = root;
+		}
 
-        if (headNode == null) {
-            headNode = root;
-            root.left = null;
-            prevNode = root;
-        } else {
-            prevNode.right = root;
-            root.left = null;
-            prevNode = root;
-        }
+		toSkewed(rightNode);
 
-        if (order > 0) {
-            toSkewed(leftNode, order);
-        } else {
-            toSkewed(rightNode, order);
-        }
+        
     }
 
     static void traverseRightSkewed(Node root) {
@@ -57,7 +50,8 @@ public class Main {
         tree.node.right.left= new Node(40);
 
         int order = 0;
-        toSkewed(node, order);
+        toSkewed(node);
+        System.out.println("The resultant  output is :");
         traverseRightSkewed(headNode);
     }
 }
